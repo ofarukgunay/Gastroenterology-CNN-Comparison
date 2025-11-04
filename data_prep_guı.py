@@ -3,39 +3,51 @@ import shutil
 import threading
 import random
 import numpy as np
+import cv2  # OpenCV eklendi
+import albumentations as A  # Albumentations eklendi
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from PIL import Image
 from sklearn.model_selection import train_test_split
 
-# Dizin Yapısı Ayarları
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))          # Proje ana dizini
+# --- Dizin Yapısı Ayarları ---
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT_DIR, "data")
 RAW_DATA_DIR = os.path.join(DATA_DIR, "kvasir-dataset-v2")
-PREPARED_DATA_DIR = os.path.join(DATA_DIR, "prepared-data")
+PREPARED_DATA_DIR = os.path.join(DATA_DIR, "data")
 
-# Global değişkenler
+# --- Global Değişkenler ---
 cancel_processing = False
 current_output_dir = None
 
-# Main Window
+# --- Albumentations Pipeline (Yeni Teknikler) ---
+# Sadece eğitim seti için kullanılacak güçlü bir zenginleştirme pipeline'ı
+albumentations_pipeline = A.Compose([
+    A.HorizontalFlip(p=0.5),
+    A.Rotate(limit=15, p=0.3, border_mode=cv2.BORDER_CONSTANT),
+    A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.7),
+    A.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1, p=0.5),
+    A.GaussNoise(var_limit=(10.0, 50.0), p=0.3),
+    A.GaussianBlur(blur_limit=(3, 7), p=0.3)
+])
+
+# --- Ana Pencere ---
 root = Tk()
-root.title("Gastroenterology Dataset Preparation Tool")
-root.geometry("560x650")
+root.title("Gastroenterology Dataset Preparation Tool (v2.0)")
+root.geometry("560x700") # Pencere boyutu artırıldı
 root.resizable(False, False)
 
-# Fonctions
+# --- Fonksiyonlar ---
 def select_folder():
     folder = filedialog.askdirectory(initialdir=DATA_DIR)
     dataset_path.set(folder)
 
-# İşlem sırasında UI öğelerini devre dışı bırakma
 def set_ui_state(state):
     widgets = [
         dataset_entry,
         train_entry, val_entry, test_entry,
         width_entry, height_entry,
-        output_entry,
+        output_entry, aug_count_entry,  # Yeni widget eklendi
         normalize_check, grayscale_check, augment_check,
         browse_button, prepare_button
     ]
@@ -46,7 +58,6 @@ def cancel_preprocessing():
     global cancel_processing
     cancel_processing = True
     progress_label.config(text="Cancelling... please wait ⏳")
-
 
 def start_preprocessing_thread():
     global cancel_processing
@@ -70,12 +81,17 @@ def start_preprocessing():
         test_ratio = int(test_var.get()) / 100
         width = int(width_var.get())
         height = int(height_var.get())
+        num_augs = int(aug_count_var.get())
     except ValueError:
-        messagebox.showerror("Error", "Invalid ratio or image size values.")
+        messagebox.showerror("Error", "Invalid ratio, image size, or augmentation count values.")
         set_ui_state("normal")
         return
     
-    # Kullanıcının belirttiği çıktı klasör adı
+    if (train_ratio + val_ratio + test_ratio) != 1.0:
+        messagebox.showerror("Error", "Ratios must sum to 100.")
+        set_ui_state("normal")
+        return
+
     folder_name = output_folder_var.get().strip()
     if not folder_name:
         messagebox.showerror("Error", "Please enter a name for the output folder.")
@@ -83,14 +99,10 @@ def start_preprocessing():
         return
 
     output_dir = os.path.join(PREPARED_DATA_DIR, folder_name)
-    current_output_dir = output_dir  # klasörü global değişkende tut
+    current_output_dir = output_dir
 
-    # Eğer klasör zaten varsa, kullanıcıya sor
     if os.path.exists(output_dir):
-        confirm = messagebox.askyesno(
-            "Overwrite Confirmation",
-            f"The folder '{folder_name}' already exists.\nDo you want to overwrite it?"
-        )
+        confirm = messagebox.askyesno("Overwrite Confirmation", f"The folder '{folder_name}' already exists.\nDo you want to overwrite it?")
         if not confirm:
             set_ui_state("normal")
             return
@@ -107,67 +119,96 @@ def start_preprocessing():
 
     progress_bar["maximum"] = total_images
     progress_bar["value"] = 0
-    progress_label.config(text="Processing started...")
+    progress_label.config(text="Processing started... (Splitting files)")
 
     for c in classes:
+        if cancel_processing: break
+        
         imgs = [os.path.join(folder, c, f) for f in os.listdir(os.path.join(folder, c)) if f.lower().endswith(('.jpg', '.png', '.jpeg'))]
+        if not imgs: continue
+        
         train_files, temp = train_test_split(imgs, test_size=(1 - train_ratio), random_state=42)
         val_files, test_files = train_test_split(temp, test_size=(test_ratio / (val_ratio + test_ratio)), random_state=42)
 
         for split_name, file_list in zip(["train", "val", "test"], [train_files, val_files, test_files]):
+            if cancel_processing: break
+            
             split_dir = os.path.join(output_dir, split_name, c)
             os.makedirs(split_dir, exist_ok=True)
+            
             for fpath in file_list:
-                if cancel_processing:
-                    # iptal edildi → klasörü tamamen sil
-                    if current_output_dir and os.path.exists(current_output_dir):
-                        shutil.rmtree(current_output_dir)
-                    progress_label.config(text="Processing cancelled ❌")
-                    messagebox.showinfo("Cancelled", "Dataset preparation was cancelled by the user.")
-                    set_ui_state("normal")
-                    return
+                if cancel_processing: break
+                
                 try:
+                    # Görüntüyü oku (PIL ile okuyup RGB'ye çevirmek en güvenlisi)
                     img = Image.open(fpath).convert("RGB")
                     img = img.resize((width, height))
 
-                    # Görsel işleme seçenekleri
+                    # Grayscale ve Normalizasyon seçenekleri
                     if grayscale_var.get():
-                        img = img.convert("L").convert("RGB")
-
+                        img = img.convert("L").convert("RGB") # 3 Kanallı Grayscale
+                    
                     if normalize_var.get():
+                        # Bu seçenek artık diske kaydederken mantıklı değil.
+                        # Normalizasyon eğitim sırasında (online) yapılmalıdır.
+                        # Ama kodda olduğu için bırakıyoruz.
                         arr = np.asarray(img).astype(np.float32) / 255.0
                         img = Image.fromarray((arr * 255).astype(np.uint8))
 
-                    if augment_var.get():
-                        if random.random() > 0.5:
-                            img = img.transpose(Image.FLIP_LEFT_RIGHT)
-                        if random.random() > 0.5:
-                            img = img.transpose(Image.FLIP_TOP_BOTTOM)
-                        if random.random() > 0.5:
-                            angle = random.randint(-15, 15)
-                            img = img.rotate(angle)
+                    # --- YENİ ZENGİNLEŞTİRME MANTIĞI ---
+                    if split_name == "train" and augment_var.get():
+                        # Sadece EĞİTİM seti ve Augmentation seçiliyse 1-N çoğaltma yap
+                        
+                        # 1. Orijinal (sadece resize/gray/norm) görüntüyü kaydet
+                        img.save(os.path.join(split_dir, os.path.basename(fpath)))
+                        
+                        # PIL görüntüsünü OpenCV/Numpy formatına çevir
+                        img_np = np.array(img)
+                        
+                        # N adet yeni versiyon oluştur
+                        for i in range(num_augs):
+                            augmented_np = albumentations_pipeline(image=img_np)['image']
+                            
+                            # Yeni dosya adı oluştur
+                            base_name, ext = os.path.splitext(os.path.basename(fpath))
+                            new_filename = f"{base_name}_aug_{i}{ext}"
+                            save_path = os.path.join(split_dir, new_filename)
+                            
+                            # OpenCV (BGR) formatında kaydet
+                            cv2.imwrite(save_path, cv2.cvtColor(augmented_np, cv2.COLOR_RGB2BGR))
+                    
+                    else:
+                        # VAL/TEST setleri veya Augmentation kapalıysa 1-1 kaydet
+                        img.save(os.path.join(split_dir, os.path.basename(fpath)))
 
-                    img.save(os.path.join(split_dir, os.path.basename(fpath)))
                     processed += 1
                     progress_bar["value"] = processed
-                    progress_label.config(text=f"Processing {processed}/{total_images} images...")
+                    progress_label.config(text=f"Processing {processed}/{total_images} input images...")
                     root.update_idletasks()
 
                 except Exception as e:
                     print(f"Error: {fpath} could not be processed ({e})")
-
-    progress_label.config(text="Completed ✅")
-    messagebox.showinfo("Done", f"Dataset prepared successfully!\nSaved in:\n{output_dir}")
+        
+    if cancel_processing:
+        if current_output_dir and os.path.exists(current_output_dir):
+            shutil.rmtree(current_output_dir)
+        progress_label.config(text="Processing cancelled ❌")
+        messagebox.showinfo("Cancelled", "Dataset preparation was cancelled by the user.")
+    else:
+        progress_label.config(text="Completed ✅")
+        messagebox.showinfo("Done", f"Dataset prepared successfully!\nSaved in:\n{output_dir}")
+    
     set_ui_state("normal")
 
-# UI Elements
+# --- UI Elemanları ---
 dataset_path = StringVar(value=RAW_DATA_DIR)
 train_var = StringVar(value="80")
 val_var = StringVar(value="10")
 test_var = StringVar(value="10")
 width_var = StringVar(value="224")
 height_var = StringVar(value="224")
-output_folder_var = StringVar(value="prepared_" + str(random.randint(100, 999)))  # varsayılan isim
+output_folder_var = StringVar(value="prepared_" + str(random.randint(100, 999)))
+aug_count_var = StringVar(value="5") # Her resim için 5 yeni versiyon (YENİ)
 
 Label(root, text="Dataset Folder:", font=("Arial", 11)).pack(pady=5)
 dataset_entry = Entry(root, textvariable=dataset_path, width=45)
@@ -210,13 +251,19 @@ normalize_var = BooleanVar(value=False)
 grayscale_var = BooleanVar(value=False)
 augment_var = BooleanVar(value=False)
 
-normalize_check = Checkbutton(frame_opts, text="Normalize (0–1)", variable=normalize_var)
+normalize_check = Checkbutton(frame_opts, text="Normalize (0–1)", variable=normalize_var, state="disabled") # Diske kaydederken anlamsız
 grayscale_check = Checkbutton(frame_opts, text="Grayscale", variable=grayscale_var)
-augment_check = Checkbutton(frame_opts, text="Augmentation (Flip/Rotate)", variable=augment_var)
+augment_check = Checkbutton(frame_opts, text="Augmentation (Train Only)", variable=augment_var)
 
 normalize_check.grid(row=0, column=0, padx=10)
 grayscale_check.grid(row=0, column=1, padx=10)
 augment_check.grid(row=0, column=2, padx=10)
+
+# --- YENİ UI ELEMANI ---
+Label(root, text="Augmentations per Image (if checked):", font=("Arial", 10)).pack(pady=(10, 0))
+aug_count_entry = Entry(root, textvariable=aug_count_var, width=5)
+aug_count_entry.pack()
+# --- ---
 
 button_frame = Frame(root)
 button_frame.pack(pady=25)
