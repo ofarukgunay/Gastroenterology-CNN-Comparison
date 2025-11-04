@@ -10,6 +10,7 @@ venv/
 ENV/
 VENV/
 cnnenv/
+torchenv/
 
 # Python cache dosyaları
 __pycache__/
