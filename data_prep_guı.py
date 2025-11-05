@@ -3,8 +3,8 @@ import shutil
 import threading
 import random
 import numpy as np
-import cv2  # OpenCV eklendi
-import albumentations as A  # Albumentations eklendi
+import cv2  
+import albumentations as A  
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from PIL import Image
@@ -20,8 +20,7 @@ PREPARED_DATA_DIR = os.path.join(DATA_DIR, "data")
 cancel_processing = False
 current_output_dir = None
 
-# --- Albumentations Pipeline (Yeni Teknikler) ---
-# Sadece eğitim seti için kullanılacak güçlü bir zenginleştirme pipeline'ı
+# --- Albumentations Pipeline ---
 albumentations_pipeline = A.Compose([
     A.HorizontalFlip(p=0.5),
     A.Rotate(limit=15, p=0.3, border_mode=cv2.BORDER_CONSTANT),
@@ -47,7 +46,7 @@ def set_ui_state(state):
         dataset_entry,
         train_entry, val_entry, test_entry,
         width_entry, height_entry,
-        output_entry, aug_count_entry,  # Yeni widget eklendi
+        output_entry, aug_count_entry,  
         normalize_check, grayscale_check, augment_check,
         browse_button, prepare_button
     ]
@@ -155,7 +154,6 @@ def start_preprocessing():
                         arr = np.asarray(img).astype(np.float32) / 255.0
                         img = Image.fromarray((arr * 255).astype(np.uint8))
 
-                    # --- YENİ ZENGİNLEŞTİRME MANTIĞI ---
                     if split_name == "train" and augment_var.get():
                         # Sadece EĞİTİM seti ve Augmentation seçiliyse 1-N çoğaltma yap
                         
@@ -208,7 +206,7 @@ test_var = StringVar(value="10")
 width_var = StringVar(value="224")
 height_var = StringVar(value="224")
 output_folder_var = StringVar(value="prepared_" + str(random.randint(100, 999)))
-aug_count_var = StringVar(value="5") # Her resim için 5 yeni versiyon (YENİ)
+aug_count_var = StringVar(value="5") # Her resim için 5 yeni versiyon 
 
 Label(root, text="Dataset Folder:", font=("Arial", 11)).pack(pady=5)
 dataset_entry = Entry(root, textvariable=dataset_path, width=45)
@@ -263,7 +261,7 @@ augment_check.grid(row=0, column=2, padx=10)
 Label(root, text="Augmentations per Image (if checked):", font=("Arial", 10)).pack(pady=(10, 0))
 aug_count_entry = Entry(root, textvariable=aug_count_var, width=5)
 aug_count_entry.pack()
-# --- ---
+
 
 button_frame = Frame(root)
 button_frame.pack(pady=25)
