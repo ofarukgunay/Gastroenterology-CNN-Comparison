@@ -75,21 +75,51 @@ def start_preprocessing():
         return
 
     try:
-        train_ratio = int(train_var.get()) / 100
-        val_ratio = int(val_var.get()) / 100
-        test_ratio = int(test_var.get()) / 100
+        # Kullanıcının hedeflediği NİHAİ oranlar
+        target_train_ratio = int(train_var.get()) / 100
+        target_val_ratio = int(val_var.get()) / 100
+        target_test_ratio = int(test_var.get()) / 100
+        
         width = int(width_var.get())
         height = int(height_var.get())
-        num_augs = int(aug_count_var.get())
+        
+        # Augmentation çarpanı (1 Orijinal + N Yeni)
+        # Eğer Augmentation kapalıysa çarpan 1'dir.
+        aug_multiplier = 1
+        if augment_var.get():
+            aug_multiplier = int(aug_count_var.get()) + 1 
+            
     except ValueError:
         messagebox.showerror("Error", "Invalid ratio, image size, or augmentation count values.")
         set_ui_state("normal")
         return
     
-    if (train_ratio + val_ratio + test_ratio) != 1.0:
+    # Oranların toplamı 1.0 (veya %100) olmalı
+    if abs((target_train_ratio + target_val_ratio + target_test_ratio) - 1.0) > 0.001:
         messagebox.showerror("Error", "Ratios must sum to 100.")
         set_ui_state("normal")
         return
+
+    # --- AKILLI ORAN HESAPLAMA (DÜZELTME BURADA) ---
+    # Hedeflenen sonuca ulaşmak için BAŞLANGIÇTA nasıl bölmeliyiz?
+    # Formül: Train verisi 'aug_multiplier' kadar şişeceği için, başlangıç payını küçültüyoruz.
+    
+    # Normalize edilmiş paydalar
+    weighted_train = target_train_ratio / aug_multiplier
+    weighted_val = target_val_ratio
+    weighted_test = target_test_ratio
+    
+    total_weight = weighted_train + weighted_val + weighted_test
+    
+    # Gerçek (Effective) Bölme Oranları
+    effective_train_ratio = weighted_train / total_weight
+    effective_val_ratio = weighted_val / total_weight
+    # Test oranı, kalan kısımdan otomatik çıkacak ama hesaplayalım:
+    effective_test_ratio = weighted_test / total_weight
+    
+    print(f"Hedef: %{target_train_ratio*100} Train (x{aug_multiplier} büyüyecek)")
+    print(f"Hesaplanan Başlangıç Bölmesi: Train: %{effective_train_ratio*100:.2f}, Val: %{effective_val_ratio*100:.2f}, Test: %{effective_test_ratio*100:.2f}")
+    # -----------------------------------------------
 
     folder_name = output_folder_var.get().strip()
     if not folder_name:
@@ -114,11 +144,14 @@ def start_preprocessing():
         len([f for f in os.listdir(os.path.join(folder, c)) if f.lower().endswith(('.jpg', '.png', '.jpeg'))])
         for c in classes
     )
-    processed = 0
-
-    progress_bar["maximum"] = total_images
+    
+    # İlerleme çubuğu için toplam işlem sayısını tahmin et
+    estimated_total_ops = int(total_images * effective_train_ratio * aug_multiplier) + int(total_images * (1 - effective_train_ratio))
+    
+    processed_ops = 0
+    progress_bar["maximum"] = estimated_total_ops
     progress_bar["value"] = 0
-    progress_label.config(text="Processing started... (Splitting files)")
+    progress_label.config(text="Processing started... (Calculating splits)")
 
     for c in classes:
         if cancel_processing: break
@@ -126,8 +159,15 @@ def start_preprocessing():
         imgs = [os.path.join(folder, c, f) for f in os.listdir(os.path.join(folder, c)) if f.lower().endswith(('.jpg', '.png', '.jpeg'))]
         if not imgs: continue
         
-        train_files, temp = train_test_split(imgs, test_size=(1 - train_ratio), random_state=42)
-        val_files, test_files = train_test_split(temp, test_size=(test_ratio / (val_ratio + test_ratio)), random_state=42)
+        # Düzeltilmiş (effective) oranları kullanarak bölme işlemi
+        train_files, temp = train_test_split(imgs, test_size=(1 - effective_train_ratio), random_state=42)
+        
+        # Kalan kısmı Val ve Test arasında orantısal böl (Burası kritik)
+        if len(temp) > 0:
+            relative_test_ratio = effective_test_ratio / (effective_val_ratio + effective_test_ratio)
+            val_files, test_files = train_test_split(temp, test_size=relative_test_ratio, random_state=42)
+        else:
+            val_files, test_files = [], []
 
         for split_name, file_list in zip(["train", "val", "test"], [train_files, val_files, test_files]):
             if cancel_processing: break
@@ -139,50 +179,41 @@ def start_preprocessing():
                 if cancel_processing: break
                 
                 try:
-                    # Görüntüyü oku (PIL ile okuyup RGB'ye çevirmek en güvenlisi)
                     img = Image.open(fpath).convert("RGB")
                     img = img.resize((width, height))
 
-                    # Grayscale ve Normalizasyon seçenekleri
                     if grayscale_var.get():
-                        img = img.convert("L").convert("RGB") # 3 Kanallı Grayscale
+                        img = img.convert("L").convert("RGB")
                     
                     if normalize_var.get():
-                        # Bu seçenek artık diske kaydederken mantıklı değil.
-                        # Normalizasyon eğitim sırasında (online) yapılmalıdır.
-                        # Ama kodda olduğu için bırakıyoruz.
                         arr = np.asarray(img).astype(np.float32) / 255.0
                         img = Image.fromarray((arr * 255).astype(np.uint8))
 
                     if split_name == "train" and augment_var.get():
-                        # Sadece EĞİTİM seti ve Augmentation seçiliyse 1-N çoğaltma yap
-                        
-                        # 1. Orijinal (sadece resize/gray/norm) görüntüyü kaydet
+                        # 1. Orijinal kaydet
                         img.save(os.path.join(split_dir, os.path.basename(fpath)))
+                        processed_ops += 1
                         
-                        # PIL görüntüsünü OpenCV/Numpy formatına çevir
+                        # 2. Çoğalt (Augment)
                         img_np = np.array(img)
+                        num_augs = int(aug_count_var.get())
                         
-                        # N adet yeni versiyon oluştur
                         for i in range(num_augs):
                             augmented_np = albumentations_pipeline(image=img_np)['image']
-                            
-                            # Yeni dosya adı oluştur
                             base_name, ext = os.path.splitext(os.path.basename(fpath))
                             new_filename = f"{base_name}_aug_{i}{ext}"
                             save_path = os.path.join(split_dir, new_filename)
-                            
-                            # OpenCV (BGR) formatında kaydet
                             cv2.imwrite(save_path, cv2.cvtColor(augmented_np, cv2.COLOR_RGB2BGR))
+                            processed_ops += 1
                     
                     else:
-                        # VAL/TEST setleri veya Augmentation kapalıysa 1-1 kaydet
                         img.save(os.path.join(split_dir, os.path.basename(fpath)))
+                        processed_ops += 1
 
-                    processed += 1
-                    progress_bar["value"] = processed
-                    progress_label.config(text=f"Processing {processed}/{total_images} input images...")
-                    root.update_idletasks()
+                    if processed_ops % 10 == 0: 
+                        progress_bar["value"] = processed_ops
+                        progress_label.config(text=f"Processing images... ({processed_ops}/{estimated_total_ops})")
+                        root.update_idletasks()
 
                 except Exception as e:
                     print(f"Error: {fpath} could not be processed ({e})")
@@ -193,8 +224,17 @@ def start_preprocessing():
         progress_label.config(text="Processing cancelled ❌")
         messagebox.showinfo("Cancelled", "Dataset preparation was cancelled by the user.")
     else:
+        progress_bar["value"] = estimated_total_ops
         progress_label.config(text="Completed ✅")
-        messagebox.showinfo("Done", f"Dataset prepared successfully!\nSaved in:\n{output_dir}")
+        
+        # Sonuç Raporu (Kullanıcıya gerçek dağılımı göster)
+        final_msg = f"Dataset prepared successfully!\nSaved in:\n{output_dir}\n\n"
+        final_msg += "Approximate Final Distribution:\n"
+        final_msg += f"Train: ~{target_train_ratio*100:.1f}% (Initial split adjusted for x{aug_multiplier} augmentation)\n"
+        final_msg += f"Val:   ~{target_val_ratio*100:.1f}%\n"
+        final_msg += f"Test:  ~{target_test_ratio*100:.1f}%"
+        
+        messagebox.showinfo("Done", final_msg)
     
     set_ui_state("normal")
 
