@@ -77,7 +77,8 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyebi
 3.  **Gerekli kütüphaneleri yükleyin:**
     pip install -r requirements.txt
     # Veya manuel kurulum için:
-    # pip install torch torchvision timm pandas numpy matplotlib scikit-learn seaborn
+    ```bash
+    pip install torch torchvision timm pandas numpy matplotlib scikit-learn seaborn
     ```
 
 ---
