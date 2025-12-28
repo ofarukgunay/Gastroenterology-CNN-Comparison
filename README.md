@@ -38,6 +38,8 @@ Projede, halka açık olan **Kvasir-v2** veri seti kullanılmıştır. Bu veri s
 
 Aşağıdaki modern ve yüksek performanslı CNN mimarileri, Transfer Öğrenme (Transfer Learning) tekniği kullanılarak karşılaştırılmıştır:
 
+* **CVT (Convolutional Vision Transformer):** CNN ve Transformer mimarilerinin hibrit birleşimi, modern ve güçlü bir yaklaşım.
+* **ResNeSt:** Split-Attention blokları kullanan gelişmiş bir ResNet varyasyonudur.
 * **EfficientNetV2:** Hız ve doğruluk arasında verimli bir denge sunan modern bir mimari.
 * **ConvNeXt:** Vision Transformer'lardan ilham alan ve yüksek doğruluk oranları sunan bir CNN.
 * **ResNeXt:** ResNet mimarisinin "Cardinality" konsepti ile geliştirilmiş bir versiyonu.
@@ -73,8 +75,9 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyebi
     [Kvasir-v2](https://datasets.simula.no/kvasir/kvasir-dataset-v2.zip) linkinden veri setini indirin ve `data/` klasörünün içine çıkarın.
 
 3.  **Gerekli kütüphaneleri yükleyin:**
-    ```bash
-    pip install tensorflow pandas numpy matplotlib scikit-learn seaborn
+    pip install -r requirements.txt
+    # Veya manuel kurulum için:
+    # pip install torch torchvision timm pandas numpy matplotlib scikit-learn seaborn
     ```
 
 ---

@@ -1,1 +1,37 @@
-{"nbformat":4,"nbformat_minor":0,"metadata":{"colab":{"provenance":[],"authorship_tag":"ABX9TyNH+M00hMB3u0Cu5k5xPC2r"},"kernelspec":{"name":"python3","display_name":"Python 3"},"language_info":{"name":"python"}},"cells":[{"cell_type":"code","execution_count":null,"metadata":{"id":"QH6bEdVAglLU"},"outputs":[],"source":["# --- Core Deep Learning Framework (PyTorch) ---\n","# Sunucuda CUDA sürümüne göre index-url ile kurulması önerilir ama temel paketler.\n","torch>=2.0.0\n","torchvision>=0.15.0\n","torchaudio>=2.0.0\n","\n","# --- Model Architectures (CRITICAL) ---\n","# ResNeSt, ConvNeXt, MobileNetV3 ve özellikle CVT için endüstri standardı kütüphane\n","timm>=0.9.0\n","\n","# --- Transformer Specifics ---\n","# CVT (Convolutional Vision Transformer) modeller için tensör operasyonları\n","einops\n","# HuggingFace tabanlı transformer modelleri gerekirse diye\n","transformers\n","\n","# --- Data Processing & Augmentation ---\n","# GUI'de ve eğitimde kullandığın gelişmiş veri artırma\n","albumentations>=1.3.0\n","# OpenCV (Headless sürümü sunucular için daha hafiftir ve GUI gerektirmez)\n","opencv-python-headless\n","pillow\n","# TensorFlow ve PyTorch çakışmasını önlemek için NumPy sürümü kritik\n","numpy>=1.21.0,<2.0.0\n","\n","# --- Metrics & Analysis ---\n","# Confusion Matrix, F1 Score, Train/Test Split işlemleri için\n","scikit-learn\n","pandas\n","\n","# --- Visualization ---\n","matplotlib\n","seaborn\n","\n","# --- Utilities & Jupyter ---\n","tqdm            # Eğitim sırasında progress bar için\n","ipykernel       # Notebook (.ipynb) çalıştırmak için"]}]}
+# --- Core Deep Learning Framework (PyTorch) ---
+# Sunucuda CUDA sürümüne göre index-url ile kurulması önerilir ama temel paketler.
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# --- Model Architectures (CRITICAL) ---
+# ResNeSt, ConvNeXt, MobileNetV3 ve özellikle CVT için endüstri standardı kütüphane
+timm>=0.9.0
+
+# --- Transformer Specifics ---
+# CVT (Convolutional Vision Transformer) modeller için tensör operasyonları
+einops
+# HuggingFace tabanlı transformer modelleri gerekirse diye
+transformers
+
+# --- Data Processing & Augmentation ---
+# GUI'de ve eğitimde kullandığın gelişmiş veri artırma
+albumentations>=1.3.0
+# OpenCV (Headless sürümü sunucular için daha hafiftir ve GUI gerektirmez)
+opencv-python-headless
+pillow
+# TensorFlow ve PyTorch çakışmasını önlemek için NumPy sürümü kritik
+numpy>=1.21.0,<2.0.0
+
+# --- Metrics & Analysis ---
+# Confusion Matrix, F1 Score, Train/Test Split işlemleri için
+scikit-learn
+pandas
+
+# --- Visualization ---
+matplotlib
+seaborn
+
+# --- Utilities & Jupyter ---
+tqdm            # Eğitim sırasında progress bar için
+ipykernel       # Notebook (.ipynb) çalıştırmak için
