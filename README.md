@@ -1,91 +1,81 @@
-# Gastroentoloji Görüntüleri Üzerine CNN Sınıflandırma Algoritmalarının Karşılaştırılması
+# Gastroentoloji Goruntuleri Uzerine CNN Karsilastirmasi
 
-Bu proje, gastrointestinal (GI) sistemden alınan endoskopik görüntüler üzerinde modern Konvolüsyonel Sinir Ağı (CNN) mimarilerinin performansını karşılaştırmayı amaçlamaktadır. Proje kapsamında, farklı CNN modelleri kullanılarak polipler, ülserler ve normal doku gibi çeşitli gastrointestinal bulguların sınıflandırılması hedeflenmiştir.
+Bu proje, Kvasir-v2 endoskopi veri seti uzerinde 6 farkli modern mimariyi ayni veri bolunmesi, benzer egitim ayarlari ve ortak metriklerle karsilastirmayi hedefler.
 
-**Yazar:** Ömer Faruk Günay
-**Tarih:** Ekim 2025
+## Projenin Amaci
 
----
+Ana hedef:
 
-## 📋 İçindekiler
-- [Proje Hakkında](#proje-hakkında)
-- [Kullanılan Veri Seti](#kullanılan-veri-seti)
-- [Karşılaştırılan Mimariler](#karşılaştırılan-mimariler)
-- [Proje Yapısı](#proje-yapısı)
-- [Kurulum](#kurulum)
-- [Kullanım](#kullanım)
-- [Sonuçlar](#sonuçlar)
+1. 6 modeli (tiny/small yerine medium/large tercihleriyle) egitmek
+2. Her model icin train/val accuracy ve loss grafiklerini uretmek
+3. Sonraki asamalarda tum modelleri ortak test setinde benchmark etmek
 
----
+## Veri Seti
 
-## 🚀 Proje Hakkında
+- Veri seti: Kvasir-v2
+- Sinif sayisi: 8
+- Kaynak: https://datasets.simula.no/kvasir/
+- Bu repodaki beklenen hazir veri klasoru: `data/prepared-data/`
+  - `data/prepared-data/train`
+  - `data/prepared-data/val`
+  - `data/prepared-data/test`
 
-Bu çalışmanın temel amacı, endoskopik görüntülerin otomatik analizinde derin öğrenmenin etkinliğini göstermek ve güncel CNN mimarilerinin bu alandaki başarımını ölçmektir.
+## Karsilastirilan 6 Model
 
----
+1. ResNeSt50 (`resnest50d`)
+2. ResNeXt50 (`resnext50_32x4d`)
+3. MobileNetV3 Large (`mobilenetv3_large_100`)
+4. EfficientNetV2 Medium (`tf_efficientnetv2_m`)
+5. CvT-13 (`cvt_13`)
+6. ConvNeXt Base (`convnext_base`)
 
-## 📊 Kullanılan Veri Seti
+## Guncel Proje Yapisi
 
-Projede, halka açık olan **Kvasir-v2** veri seti kullanılmıştır. Bu veri seti, 8 farklı sınıfta toplam 8000 adet endoskopik görüntü içermektedir.
-
-- **Veri Seti Adı:** Kvasir-v2
-- **Kaynak:** [Simula Datasets](https://datasets.simula.no/kvasir/)
-- **Sınıflar:** 8 (polyps, normal-cecum, ulcerative-colitis vb.)
-
----
-
-## 🧠 Karşılaştırılan Mimariler
-
-Aşağıdaki modern ve yüksek performanslı CNN mimarileri, Transfer Öğrenme (Transfer Learning) tekniği kullanılarak karşılaştırılmıştır:
-
-* **CVT (Convolutional Vision Transformer):** CNN ve Transformer mimarilerinin hibrit birleşimi, modern ve güçlü bir yaklaşım.
-* **ResNeSt:** Split-Attention blokları kullanan gelişmiş bir ResNet varyasyonudur.
-* **EfficientNetV2:** Hız ve doğruluk arasında verimli bir denge sunan modern bir mimari.
-* **ConvNeXt:** Vision Transformer'lardan ilham alan ve yüksek doğruluk oranları sunan bir CNN.
-* **ResNeXt:** ResNet mimarisinin "Cardinality" konsepti ile geliştirilmiş bir versiyonu.
-* **MobileNetV3:** Özellikle mobil ve düşük işlem gücüne sahip cihazlar için tasarlanmış hafif bir model.
-
----
-
-## 📂 Proje Yapısı
-
-Proje dosyaları aşağıdaki gibi organize edilmiştir:
-```
-├── data/                 # Veri setinin bulunduğu klasör (.gitignore ile hariç tutulmuştur)
-├── notebooks/            # Veri analizi ve model eğitimi Jupyter Notebook'ları
-├── src/                  # Yardımcı fonksiyonlar ve Python script'leri
-├── models/               # Eğitilmiş model ağırlıklarının kaydedildiği klasör (.gitignore ile hariç tutulmuştur)
-├── .gitignore            # Git tarafından izlenmeyecek dosyalar
-└── README.md             # Bu dosya
+```text
+.
+|-- data/
+|   `-- prepared-data/
+|-- data_prep_guı.py
+|-- ResNeSt/
+|   `-- 01_ResNeSt50_Training.ipynb
+|-- ResNeXt/
+|   `-- 02_ResNeXt50_Training.ipynb
+|-- MobileNetV3/
+|   `-- 03_MobileNetV3Large_Training.ipynb
+|-- EfficienNetV2/
+|   `-- 04_EfficientNetV2_Training.ipynb
+|-- CVT/
+|   `-- 05_CVT_Training.ipynb
+|-- ConvNeXt/
+|   `-- 06_ConvNeXt_Base_Training.ipynb
+|-- evaluation.ipynb
+|-- requirements.txt
+`-- outputs/
 ```
 
----
+## Kurulum
 
-## 🛠️ Kurulum
+```bash
+pip install -r requirements.txt
+```
 
-Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyebilirsiniz.
+## Ilk Asama Kullanim Akisi
 
-1.  **Repoyu klonlayın:**
-    ```bash
-    git clone [https://github.com/](https://github.com/)[kullanici-adiniz]/[repo-adiniz].git
-    cd [repo-adiniz]
-    ```
+1. Gerekirse `data_prep_guı.py` ile veri hazirlama adimini tamamla.
+2. Asagidaki notebooklari sirayla calistir:
+   - `ResNeSt/01_ResNeSt50_Training.ipynb`
+   - `ResNeXt/02_ResNeXt50_Training.ipynb`
+   - `MobileNetV3/03_MobileNetV3Large_Training.ipynb`
+   - `EfficienNetV2/04_EfficientNetV2_Training.ipynb`
+   - `CVT/05_CVT_Training.ipynb`
+   - `ConvNeXt/06_ConvNeXt_Base_Training.ipynb`
+3. Her model kendi cikti klasorune su dosyalari yazacaktir:
+   - `best_model.pth`
+   - `training_graph.png` (train/val accuracy + train/val loss)
+   - `classification_report.txt`
+   - `confusion_matrix.png`
 
-2.  **Veri setini indirin:**
-    [Kvasir-v2](https://datasets.simula.no/kvasir/kvasir-dataset-v2.zip) linkinden veri setini indirin ve `data/` klasörünün içine çıkarın.
+## Degerlendirme
 
-3.  **Gerekli kütüphaneleri yükleyin:**
-    pip install -r requirements.txt
-    # Veya manuel kurulum için:
-    ```bash
-    pip install torch torchvision timm pandas numpy matplotlib scikit-learn seaborn
-    ```
-
----
-
-## ⚡ Kullanım
-
-Model eğitimi ve değerlendirme süreçleri `notebooks/` klasöründeki Jupyter Notebook'ları üzerinden yürütülebilir. Örnek olarak: `notebooks/1_EfficientNetV2_Egitimi.ipynb` dosyasını çalıştırarak eğitime başlayabilirsiniz.
-
----
+Tum modellerin ortak karsilastirmasi icin `evaluation.ipynb` kullanilir. Notebook, `models/pytorch/` altinda model klasorlerini bularak test setinde metrikleri hesaplar.
 

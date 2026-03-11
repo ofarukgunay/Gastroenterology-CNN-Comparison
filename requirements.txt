@@ -20,8 +20,9 @@ albumentations>=1.3.0
 # OpenCV (Headless sürümü sunucular için daha hafiftir ve GUI gerektirmez)
 opencv-python-headless
 pillow
-# TensorFlow ve PyTorch çakışmasını önlemek için NumPy sürümü kritik
-numpy>=1.21.0,<2.0.0
+# Python 3.13+ için NumPy 1.x wheel bulunmadığından sürüme göre koşullu kurulum
+numpy>=1.21.0,<2.0.0; python_version < "3.13"
+numpy>=2.1.0; python_version >= "3.13"
 
 # --- Metrics & Analysis ---
 # Confusion Matrix, F1 Score, Train/Test Split işlemleri için
