@@ -51,6 +51,15 @@ Ana hedef:
 |-- evaluation.ipynb
 |-- requirements.txt
 `-- outputs/
+   |-- mobilenetv3_large_100/
+   |   |-- ablation_results_mobilenetv3_large_100.csv
+   |   |-- plots/
+   |   `-- reports/
+   |-- tf_efficientnetv2_m/
+   |   |-- ablation_results_tf_efficientnetv2_m.csv
+   |   |-- plots/
+   |   `-- reports/
+   `-- ... (diger modeller)
 ```
 
 ## Kurulum
@@ -71,9 +80,10 @@ pip install -r requirements.txt
    - `ConvNeXt/06_ConvNeXt_Base_Training.ipynb`
 3. Her model kendi cikti klasorune su dosyalari yazacaktir:
    - `best_model.pth`
-   - `training_graph.png` (train/val accuracy + train/val loss)
-   - `classification_report.txt`
-   - `confusion_matrix.png`
+   - `outputs/<model_adi>/plots/training_graph_...png` (train/val accuracy + train/val loss)
+   - `outputs/<model_adi>/reports/classification_report_...txt`
+   - `outputs/<model_adi>/plots/confusion_matrix_...png`
+   - `outputs/<model_adi>/ablation_results_<model_adi>.csv`
 
 ## Degerlendirme
 
