@@ -4,8 +4,8 @@ from typing import Sequence
 from common import (
     ImageSample,
     build_classification_prompt,
+    build_visual_input,
     evaluate_predictions,
-    open_rgb_image,
     parse_common_args,
     torch_dtype_from_name,
 )
@@ -42,8 +42,8 @@ def main() -> None:
     processor.vision_feature_select_strategy = "full"
 
     def predict(image_path: Path, class_names: Sequence[str], support_examples: Sequence[ImageSample]) -> str:
-        image = open_rgb_image(image_path)
-        prompt_text = build_classification_prompt(class_names, False)
+        image = build_visual_input(image_path, support_examples, args.few_shot_format)
+        prompt_text = build_classification_prompt(class_names, bool(support_examples), args.prompt_style)
         if getattr(processor, "chat_template", None):
             messages = [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": prompt_text}]}]
             prompt = processor.apply_chat_template(messages, add_generation_prompt=True)

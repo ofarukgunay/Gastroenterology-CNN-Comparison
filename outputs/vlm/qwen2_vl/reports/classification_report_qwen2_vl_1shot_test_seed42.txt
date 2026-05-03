@@ -3,12 +3,12 @@
     dyed-lifted-polyps     0.0000    0.0000    0.0000       151
 dyed-resection-margins     0.0000    0.0000    0.0000       151
            esophagitis     0.0000    0.0000    0.0000       151
-          normal-cecum     0.1433    0.6490    0.2347       151
+          normal-cecum     0.0000    0.0000    0.0000       151
         normal-pylorus     0.0000    0.0000    0.0000       151
          normal-z-line     0.0000    0.0000    0.0000       151
-                polyps     0.1851    0.6424    0.2874       151
+                polyps     0.1250    1.0000    0.2222       151
     ulcerative-colitis     0.0000    0.0000    0.0000       151
 
-              accuracy                         0.1614      1208
-             macro avg     0.0410    0.1614    0.0653      1208
-          weighted avg     0.0410    0.1614    0.0653      1208
+              accuracy                         0.1250      1208
+             macro avg     0.0156    0.1250    0.0278      1208
+          weighted avg     0.0156    0.1250    0.0278      1208

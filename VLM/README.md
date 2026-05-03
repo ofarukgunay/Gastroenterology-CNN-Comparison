@@ -1,6 +1,6 @@
 # VLM Evaluation
 
-This folder adds zero-shot and few-shot evaluation for the 6 selected vision-language models.
+This folder adds few-shot evaluation for the 6 selected vision-language models.
 Each model has its own entrypoint so model-specific processor/loading problems do not block the others.
 
 ## Models
@@ -47,25 +47,6 @@ Run a tiny test first, one image per class:
 python VLM/evaluate_qwen2_vl.py --max-samples-per-class 1 --device auto
 ```
 
-## Zero-Shot Evaluation
-
-Run one model on the full test split:
-
-```bash
-python VLM/evaluate_qwen2_vl.py --device auto
-```
-
-Run the final models one by one:
-
-```bash
-python VLM/evaluate_moondream.py --device auto
-python VLM/evaluate_qwen2_vl.py --device auto
-python VLM/evaluate_qwen25_vl.py --device auto
-python VLM/evaluate_smolvlm_500m.py --device auto
-python VLM/evaluate_blip2_opt.py --device auto
-python VLM/evaluate_llava_phi3.py --device auto
-```
-
 ## Few-Shot Evaluation
 
 Use `--shots K` to select K support images per class from `train`.
@@ -79,7 +60,7 @@ Important: image-based in-context few-shot is currently used for adapters that s
 - `qwen2_vl`
 - `qwen25_vl`
 
-The other adapters still run with the query image and class-list prompt. For those models, few-shot should be handled later with LoRA/fine-tuning if a fair few-shot training comparison is required.
+The other adapters receive only one image through their current APIs. For those models, use `--few-shot-format montage` so support examples and the query image are presented in one labeled composite image.
 
 Removed/problematic models from the first trial:
 
@@ -89,24 +70,52 @@ Removed/problematic models from the first trial:
 
 ## Suggested Run Order
 
-Start with `--max-samples-per-class 1` for each model, then remove that flag for the real test.
+Start with `--max-samples-per-class 1` for each few-shot condition, then remove that flag for the real test.
 
-Recommended full zero-shot order on the current machine:
+Current first image-based 1-shot results on the full test split (`1208` images, `seed=42`, `max_new_tokens=16`):
 
-1. `qwen2_vl`
-2. `moondream`
-3. `qwen25_vl`
-4. `blip2_opt`
-5. `smolvlm_500m`
-6. `llava_phi3`
+| Model | Prompt | Shots | Support images | Accuracy | Macro F1 | Note |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| `qwen25_vl` | `choice` | 1 | 8 | 0.2541 | 0.1802 | Numbered-option prompt; best VLM accuracy so far. |
+| `qwen2_vl` | `standard` | 1 | 8 | 0.1250 | 0.0278 | One support image per class from `train`. |
+| `qwen25_vl` | `standard` | 1 | 8 | 0.1995 | 0.1258 | One support image per class from `train`. |
 
-Current first zero-shot results on the full test split (`1208` images, `seed=42`, `max_new_tokens=16`):
+For the reportable VLM comparison, use only full-test few-shot rows. Zero-shot outputs were removed because this project phase focuses on few-shot prompting.
 
-| Model | Accuracy | Macro F1 | Note |
-| --- | ---: | ---: | --- |
-| `qwen25_vl` | 0.2285 | 0.1888 | Best first zero-shot result. |
-| `moondream` | 0.1772 | 0.0937 | Completed full test split. |
-| `qwen2_vl` | 0.1614 | 0.0653 | Completed full test split. |
-| `llava_phi3` | 0.1258 | 0.0309 | Completed, but very slow on this machine. |
-| `blip2_opt` | 0.1250 | 0.0278 | Completed full test split. |
-| `smolvlm_500m` | 0.0141 | 0.0191 | Completed full test split. |
+## Prompt Variants
+
+The default few-shot format is the original inline prompt, so the first experiment outputs remain reproducible.
+For the next controlled trials, use the prompt tags below. They are appended to output filenames and result rows.
+
+```bash
+python VLM/evaluate_qwen2_vl.py --shots 1 --prompt-style choice --device auto
+python VLM/evaluate_qwen25_vl.py --shots 1 --prompt-style choice --device auto
+```
+
+Use `medical_choice` to apply the prompt engineering rules used in the second phase:
+
+- fixed output format
+- numbered options
+- exact class-label constraint
+- short medical descriptions for technical labels
+- reminder that small mucosal texture/color/anatomical details matter
+
+This prompt style can be used by all 6 VLM adapters. For `qwen2_vl` and `qwen25_vl`, combine it with `--shots 1` for native image-based few-shot. For the other adapters, combine `--shots 1` with `--few-shot-format montage` so support examples and the query are shown in one composite image.
+
+```bash
+python VLM/evaluate_moondream.py --shots 1 --few-shot-format montage --prompt-style choice --device auto
+python VLM/evaluate_qwen2_vl.py --shots 1 --prompt-style medical_choice --device auto
+python VLM/evaluate_qwen25_vl.py --shots 1 --prompt-style medical_choice --device auto
+python VLM/evaluate_smolvlm_500m.py --shots 1 --few-shot-format montage --prompt-style choice --device auto
+python VLM/evaluate_blip2_opt.py --shots 1 --few-shot-format montage --prompt-style choice --device auto
+python VLM/evaluate_llava_phi3.py --shots 1 --few-shot-format montage --prompt-style choice --device auto
+```
+
+For Qwen models, labeled support images can also be provided as separate chat turns:
+
+```bash
+python VLM/evaluate_qwen2_vl.py --shots 1 --prompt-style choice --few-shot-format conversation --device auto
+python VLM/evaluate_qwen25_vl.py --shots 1 --prompt-style choice --few-shot-format conversation --device auto
+```
+
+Use smoke tests first by adding `--max-samples-per-class 1`. Smoke outputs contain `_max1` and should not be included in final reported results.

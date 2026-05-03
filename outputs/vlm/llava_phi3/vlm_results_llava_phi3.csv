@@ -1,3 +1,1 @@
-﻿timestamp,model_key,model_id,split,shots,seed,support_split,num_test_samples,num_support_examples,accuracy,macro_f1,weighted_f1,macro_precision,macro_recall,predictions_csv,classification_report,confusion_matrix
-2026-05-03 12:08:27,llava_phi3,xtuner/llava-phi-3-mini-hf,test,0,42,train,1208,0,0.12582781456953643,0.03090084460099231,0.030900844600992308,0.06558603491271821,0.12582781456953643,outputs\vlm\llava_phi3\predictions\predictions_llava_phi3_0shot_test_seed42.csv,outputs\vlm\llava_phi3\reports\classification_report_llava_phi3_0shot_test_seed42.txt,outputs\vlm\llava_phi3\plots\confusion_matrix_llava_phi3_0shot_test_seed42.png
-
+﻿"timestamp","model_key","model_id","split","shots","seed","support_split","num_test_samples","num_support_examples","accuracy","macro_f1","weighted_f1","macro_precision","macro_recall","predictions_csv","classification_report","confusion_matrix"

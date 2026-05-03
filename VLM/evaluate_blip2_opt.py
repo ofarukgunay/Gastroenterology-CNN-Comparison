@@ -4,8 +4,8 @@ from typing import Sequence
 from common import (
     ImageSample,
     build_classification_prompt,
+    build_visual_input,
     evaluate_predictions,
-    open_rgb_image,
     parse_common_args,
     torch_dtype_from_name,
 )
@@ -39,8 +39,8 @@ def main() -> None:
     processor = Blip2Processor.from_pretrained(MODEL_ID, local_files_only=args.local_files_only)
 
     def predict(image_path: Path, class_names: Sequence[str], support_examples: Sequence[ImageSample]) -> str:
-        image = open_rgb_image(image_path)
-        prompt = build_classification_prompt(class_names, False)
+        image = build_visual_input(image_path, support_examples, args.few_shot_format)
+        prompt = build_classification_prompt(class_names, bool(support_examples), args.prompt_style)
         inputs = processor(images=image, text=prompt, return_tensors="pt")
         model_dtype = next(model.parameters()).dtype
         inputs = {

@@ -3,7 +3,7 @@ from typing import Sequence
 
 from common import (
     ImageSample,
-    build_classification_prompt,
+    build_qwen_messages,
     evaluate_predictions,
     parse_common_args,
     torch_dtype_from_name,
@@ -38,16 +38,13 @@ def main() -> None:
     processor = AutoProcessor.from_pretrained(MODEL_ID, local_files_only=args.local_files_only)
 
     def predict(image_path: Path, class_names: Sequence[str], support_examples: Sequence[ImageSample]) -> str:
-        content = []
-        if support_examples:
-            content.append({"type": "text", "text": "Labeled reference examples:"})
-            for example in support_examples:
-                content.append({"type": "image", "image": str(example.path)})
-                content.append({"type": "text", "text": f"Class: {example.label}"})
-            content.append({"type": "text", "text": "Now classify the query image."})
-        content.append({"type": "image", "image": str(image_path)})
-        content.append({"type": "text", "text": build_classification_prompt(class_names, bool(support_examples))})
-        messages = [{"role": "user", "content": content}]
+        messages = build_qwen_messages(
+            image_path=image_path,
+            class_names=class_names,
+            support_examples=support_examples,
+            few_shot_format=args.few_shot_format,
+            prompt_style=args.prompt_style,
+        )
         inputs = processor.apply_chat_template(
             messages,
             tokenize=True,

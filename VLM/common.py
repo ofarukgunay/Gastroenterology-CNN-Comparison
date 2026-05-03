@@ -13,6 +13,17 @@ DEFAULT_DATA_DIR = PROJECT_ROOT / "data" / "prepared-data"
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "outputs" / "vlm"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
+CLASS_DESCRIPTIONS = {
+    "dyed-lifted-polyps": "a chromoendoscopy image where dye highlights lifted polyp tissue before removal",
+    "dyed-resection-margins": "a chromoendoscopy image showing the dyed margin or border after tissue resection",
+    "esophagitis": "inflammation or irritation in the esophagus, often near the gastroesophageal junction",
+    "normal-cecum": "a normal cecum view, often including the appendiceal orifice or ileocecal valve region",
+    "normal-pylorus": "a normal pylorus view showing the gastric outlet opening",
+    "normal-z-line": "a normal z-line view at the gastroesophageal junction",
+    "polyps": "an endoscopy image containing one or more visible polyp lesions",
+    "ulcerative-colitis": "inflamed colon mucosa with findings compatible with ulcerative colitis",
+}
+
 
 @dataclass(frozen=True)
 class ImageSample:
@@ -88,13 +99,57 @@ def select_support_examples(
     return examples
 
 
-def build_classification_prompt(class_names: Sequence[str], has_support_images: bool) -> str:
-    classes = "\n".join(f"- {name}" for name in class_names)
+def build_classification_prompt(
+    class_names: Sequence[str],
+    has_support_images: bool,
+    prompt_style: str = "standard",
+) -> str:
     support_sentence = (
         "Use the labeled example images as references before classifying the final query image."
         if has_support_images
         else "Use the class list and the visual content of the image."
     )
+
+    if prompt_style == "choice":
+        choices = "\n".join(f"{index}. {name}" for index, name in enumerate(class_names, start=1))
+        return (
+            "You are a medical image classification assistant for gastrointestinal endoscopy images.\n"
+            f"{support_sentence}\n"
+            "Classify only the final query image by choosing one option.\n\n"
+            "Options:\n"
+            f"{choices}\n\n"
+            "Return only the option number and class label, for example: 3. esophagitis"
+        )
+
+    if prompt_style == "medical_choice":
+        choices = "\n".join(
+            f"{index}. {name}: {CLASS_DESCRIPTIONS.get(name, 'gastrointestinal endoscopy class')}"
+            for index, name in enumerate(class_names, start=1)
+        )
+        return (
+            "You are a medical image classification assistant for gastrointestinal endoscopy images.\n"
+            f"{support_sentence}\n"
+            "The disease or landmark may depend on small mucosal texture, color, shape, or anatomical details.\n"
+            "Classify only the final query image. Use any reference images only as visual examples of the labels.\n\n"
+            "Valid options:\n"
+            f"{choices}\n\n"
+            "Return exactly one option number and exact class label from the list above, for example: "
+            "3. esophagitis\n"
+            "Do not explain. Do not invent a new label."
+        )
+
+    classes = "\n".join(f"- {name}" for name in class_names)
+
+    if prompt_style == "strict":
+        return (
+            "You are a medical image classification assistant for gastrointestinal endoscopy images.\n"
+            f"{support_sentence}\n"
+            "Classify only the final query image. Do not classify the reference examples.\n\n"
+            "Valid class labels:\n"
+            f"{classes}\n\n"
+            "Answer with exactly one valid class label from the list above. Do not use synonyms. Do not explain."
+        )
+
     return (
         "You are a medical image classification assistant for gastrointestinal endoscopy images.\n"
         f"{support_sentence}\n\n"
@@ -102,6 +157,59 @@ def build_classification_prompt(class_names: Sequence[str], has_support_images: 
         f"{classes}\n\n"
         "Return only one class name. Do not explain."
     )
+
+
+def build_qwen_messages(
+    image_path: Path,
+    class_names: Sequence[str],
+    support_examples: Sequence[ImageSample],
+    few_shot_format: str,
+    prompt_style: str,
+) -> List[dict]:
+    prompt = build_classification_prompt(class_names, bool(support_examples), prompt_style)
+
+    if support_examples and few_shot_format == "conversation":
+        messages: List[dict] = []
+        for example in support_examples:
+            messages.append(
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "image", "image": str(example.path)},
+                        {
+                            "type": "text",
+                            "text": "This is a labeled reference image. Return its class label only.",
+                        },
+                    ],
+                }
+            )
+            messages.append(
+                {
+                    "role": "assistant",
+                    "content": [{"type": "text", "text": example.label}],
+                }
+            )
+        messages.append(
+            {
+                "role": "user",
+                "content": [
+                    {"type": "image", "image": str(image_path)},
+                    {"type": "text", "text": prompt},
+                ],
+            }
+        )
+        return messages
+
+    content = []
+    if support_examples:
+        content.append({"type": "text", "text": "Labeled reference examples:"})
+        for example in support_examples:
+            content.append({"type": "image", "image": str(example.path)})
+            content.append({"type": "text", "text": f"Class: {example.label}"})
+        content.append({"type": "text", "text": "Now classify the query image."})
+    content.append({"type": "image", "image": str(image_path)})
+    content.append({"type": "text", "text": prompt})
+    return [{"role": "user", "content": content}]
 
 
 def normalize_answer(raw_answer: str, class_names: Sequence[str]) -> str:
@@ -121,6 +229,14 @@ def normalize_answer(raw_answer: str, class_names: Sequence[str]) -> str:
             matches.append((index, class_name))
     if matches:
         return sorted(matches, key=lambda item: item[0])[0][1]
+
+    option_match = re.search(r"\b(?:option|class|label|choice|answer)\s*[:#.-]?\s*([1-9][0-9]?)\b", normalized_answer)
+    if not option_match:
+        option_match = re.fullmatch(r"([1-9][0-9]?)", normalized_answer)
+    if option_match:
+        option_index = int(option_match.group(1))
+        if 1 <= option_index <= len(class_names):
+            return class_names[option_index - 1]
 
     aliases = {
         "dyed lifted polyps": "dyed-lifted-polyps",
@@ -144,6 +260,54 @@ def open_rgb_image(path: Path):
     from PIL import Image
 
     return Image.open(path).convert("RGB")
+
+
+def _fit_image_on_canvas(image, size: Tuple[int, int], fill: str = "white"):
+    from PIL import Image
+
+    canvas = Image.new("RGB", size, fill)
+    image = image.convert("RGB")
+    image.thumbnail(size)
+    x = (size[0] - image.width) // 2
+    y = (size[1] - image.height) // 2
+    canvas.paste(image, (x, y))
+    return canvas
+
+
+def build_few_shot_montage(
+    image_path: Path,
+    support_examples: Sequence[ImageSample],
+    cell_size: Tuple[int, int] = (224, 224),
+    label_height: int = 34,
+):
+    from math import ceil, sqrt
+    from PIL import Image, ImageDraw
+
+    panels = list(support_examples) + [ImageSample(path=image_path, label="QUERY")]
+    cols = max(3, ceil(sqrt(len(panels))))
+    rows = ceil(len(panels) / cols)
+    montage = Image.new("RGB", (cols * cell_size[0], rows * (cell_size[1] + label_height)), "white")
+    draw = ImageDraw.Draw(montage)
+
+    for index, panel in enumerate(panels):
+        row = index // cols
+        col = index % cols
+        x = col * cell_size[0]
+        y = row * (cell_size[1] + label_height)
+        label = panel.label
+        image = _fit_image_on_canvas(open_rgb_image(panel.path), cell_size)
+        montage.paste(image, (x, y))
+        draw.rectangle([x, y + cell_size[1], x + cell_size[0], y + cell_size[1] + label_height], fill="white")
+        draw.rectangle([x, y, x + cell_size[0] - 1, y + cell_size[1] + label_height - 1], outline="black")
+        draw.text((x + 6, y + cell_size[1] + 8), label, fill="black")
+
+    return montage
+
+
+def build_visual_input(image_path: Path, support_examples: Sequence[ImageSample], few_shot_format: str):
+    if support_examples and few_shot_format == "montage":
+        return build_few_shot_montage(image_path, support_examples)
+    return open_rgb_image(image_path)
 
 
 def display_path(path: Path) -> str:
@@ -210,6 +374,8 @@ def parse_common_args(description: str) -> argparse.Namespace:
     parser.add_argument("--device", default="auto")
     parser.add_argument("--torch-dtype", default="auto", choices=["auto", "float16", "bfloat16", "float32"])
     parser.add_argument("--max-new-tokens", type=int, default=32)
+    parser.add_argument("--prompt-style", choices=["standard", "strict", "choice", "medical_choice"], default="standard")
+    parser.add_argument("--few-shot-format", choices=["inline", "conversation", "montage"], default="inline")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--local-files-only", action="store_true")
     return parser.parse_args()
@@ -260,11 +426,19 @@ def evaluate_predictions(
         print(f"Image few-shot support: {supports_support_images}")
         return {}
 
-    used_support = support_examples if supports_support_images else []
-    if args.shots > 0 and support_examples and not supports_support_images:
-        print(f"[WARN] {model_key} does not support image-based in-context examples; running class-list prompt.")
+    uses_montage = args.shots > 0 and args.few_shot_format == "montage"
+    used_support = support_examples if supports_support_images or uses_montage else []
+    if args.shots > 0 and support_examples and not supports_support_images and not uses_montage:
+        print(
+            f"[WARN] {model_key} does not support separate image examples; "
+            "running without visual support. Use --few-shot-format montage for composite-image few-shot."
+        )
 
     run_tag = f"{args.shots}shot_{args.split}_seed{args.seed}"
+    if args.prompt_style != "standard":
+        run_tag += f"_{args.prompt_style}"
+    if args.shots > 0 and args.few_shot_format != "inline":
+        run_tag += f"_{args.few_shot_format}"
     if args.max_samples_per_class:
         run_tag += f"_max{args.max_samples_per_class}"
 
