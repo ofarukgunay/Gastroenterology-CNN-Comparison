@@ -1,0 +1,3 @@
+﻿timestamp,model_key,model_id,split,shots,seed,support_split,num_test_samples,num_support_examples,accuracy,macro_f1,weighted_f1,macro_precision,macro_recall,predictions_csv,classification_report,confusion_matrix
+2026-05-03 02:52:41,blip2_opt,Salesforce/blip2-opt-2.7b,test,0,42,train,1208,0,0.125,0.027777777777777776,0.02777777777777778,0.015625,0.125,outputs\vlm\blip2_opt\predictions\predictions_blip2_opt_0shot_test_seed42.csv,outputs\vlm\blip2_opt\reports\classification_report_blip2_opt_0shot_test_seed42.txt,outputs\vlm\blip2_opt\plots\confusion_matrix_blip2_opt_0shot_test_seed42.png
+
