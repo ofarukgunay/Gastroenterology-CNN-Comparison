@@ -60,3 +60,6 @@ models/
 
 # Windows thumbnail cache
 Thumbs.db
+
+# Legacy local VLM prototype; per-model entrypoints are used instead
+VLM/vlm_evaluate.py

@@ -1,0 +1,14 @@
+                        precision    recall  f1-score   support
+
+    dyed-lifted-polyps     0.2279    0.9205    0.3653       151
+dyed-resection-margins     0.2000    0.0066    0.0128       151
+           esophagitis     0.0000    0.0000    0.0000       151
+          normal-cecum     0.0172    0.0132    0.0150       151
+        normal-pylorus     0.3333    0.1523    0.2091       151
+         normal-z-line     0.0000    0.0000    0.0000       151
+                polyps     0.1701    0.3775    0.2346       151
+    ulcerative-colitis     0.2603    0.1258    0.1696       151
+
+              accuracy                         0.1995      1208
+             macro avg     0.1511    0.1995    0.1258      1208
+          weighted avg     0.1511    0.1995    0.1258      1208
