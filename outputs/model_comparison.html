@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gastroenteroloji CNN Model Kıyaslama Tablosu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary:    #0d1117;
+      --bg-secondary:  #161b22;
+      --bg-card:       #1c2333;
+      --bg-hover:      #21262d;
+      --border:        #30363d;
+      --text-primary:  #e6edf3;
+      --text-muted:    #8b949e;
+      --accent-blue:   #58a6ff;
+      --accent-green:  #3fb950;
+      --accent-yellow: #e3b341;
+      --accent-red:    #f85149;
+      --accent-purple: #bc8cff;
+      --accent-orange: #ffa657;
+      --accent-teal:   #39d353;
+      --gold:          #f0c040;
+      --cnn-color:     #388bfd;
+      --vlm-color:     #d2a8ff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 0 0 60px 0;
+    }
+
+    /* ── Header ─────────────────────────────── */
+    .header {
+      background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 50%, #0d1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(88,166,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-title {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #58a6ff, #bc8cff, #39d353);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 400;
+    }
+    .header-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.25);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      color: var(--accent-blue);
+      margin-top: 16px;
+      font-weight: 500;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ── Summary Cards ──────────────────────── */
+    .summary-section {
+      padding: 32px 40px 0;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .summary-card:hover { transform: translateY(-2px); border-color: rgba(88,166,255,0.4); }
+    .summary-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: 12px 12px 0 0;
+    }
+    .summary-card.blue::before   { background: linear-gradient(90deg, #58a6ff, #1f6feb); }
+    .summary-card.green::before  { background: linear-gradient(90deg, #3fb950, #2ea043); }
+    .summary-card.purple::before { background: linear-gradient(90deg, #bc8cff, #8957e5); }
+    .summary-card.gold::before   { background: linear-gradient(90deg, #f0c040, #d29922); }
+    .summary-card.orange::before { background: linear-gradient(90deg, #ffa657, #e85c00); }
+
+    .card-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+    .card-value { font-size: 1.75rem; font-weight: 700; line-height: 1; }
+    .card-sub   { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── Section Title ──────────────────────── */
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title span {
+      width: 4px; height: 20px; border-radius: 2px;
+      display: inline-block;
+    }
+    .section-title.cnn span { background: var(--cnn-color); }
+    .section-title.vlm span { background: var(--vlm-color); }
+
+    /* ── Table ──────────────────────────────── */
+    .table-wrapper {
+      padding: 0 40px;
+      overflow-x: auto;
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      min-width: 900px;
+    }
+    thead th {
+      background: var(--bg-secondary);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      position: sticky; top: 0; z-index: 10;
+    }
+    thead th:first-child { border-radius: 8px 0 0 0; }
+    thead th:last-child  { border-radius: 0 8px 0 0; }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(48,54,61,0.5);
+      transition: background 0.15s;
+    }
+    tbody tr:hover { background: var(--bg-hover); }
+    tbody td {
+      padding: 13px 16px;
+      vertical-align: middle;
+    }
+    tbody tr:last-child { border-bottom: none; }
+
+    /* Model name cell */
+    .model-cell { display: flex; align-items: center; gap: 10px; }
+    .model-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+    }
+    .model-name  { font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
+    .model-sub   { font-size: 0.73rem; color: var(--text-muted); margin-top: 1px; }
+    .type-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 10px;
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .type-cnn { background: rgba(56,139,253,0.15); color: #58a6ff; border: 1px solid rgba(56,139,253,0.3); }
+    .type-vlm { background: rgba(188,140,255,0.15); color: #bc8cff; border: 1px solid rgba(188,140,255,0.3); }
+
+    /* Metric cells */
+    .metric-f1   { font-weight: 700; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+    .metric-acc  { font-weight: 500; font-variant-numeric: tabular-nums; }
+    .metric-muted { color: var(--text-muted); font-size: 0.82rem; }
+
+    /* Bar chart in cell */
+    .bar-container {
+      display: flex; align-items: center; gap: 8px; min-width: 120px;
+    }
+    .bar-bg {
+      flex: 1; height: 6px; background: rgba(48,54,61,0.8);
+      border-radius: 3px; overflow: hidden; min-width: 80px;
+    }
+    .bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+    .bar-label { font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 44px; }
+
+    /* Color scale for F1 */
+    .f1-low    { color: #f85149; }
+    .f1-medium { color: #e3b341; }
+    .f1-good   { color: #3fb950; }
+    .f1-best   { color: #f0c040; }
+
+    /* Rank badge */
+    .rank-badge {
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700;
+    }
+    .rank-1 { background: rgba(240,192,64,0.2);  color: #f0c040; border: 1px solid rgba(240,192,64,0.4); }
+    .rank-2 { background: rgba(192,192,192,0.2); color: #c0c0c0; border: 1px solid rgba(192,192,192,0.4); }
+    .rank-3 { background: rgba(205,127,50,0.2);  color: #cd7f32; border: 1px solid rgba(205,127,50,0.4); }
+    .rank-n { background: rgba(48,54,61,0.5);    color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* Aug pill */
+    .aug-pill {
+      display: inline-block; padding: 2px 8px; border-radius: 8px;
+      font-size: 0.67rem; font-weight: 500; white-space: nowrap;
+      background: rgba(63,185,80,0.12); color: #3fb950; border: 1px solid rgba(63,185,80,0.25);
+    }
+    .aug-pill.none { background: rgba(139,148,158,0.12); color: var(--text-muted); border-color: rgba(139,148,158,0.25); }
+    .aug-pill.vlm  { background: rgba(188,140,255,0.12); color: #bc8cff; border-color: rgba(188,140,255,0.25); }
+
+    /* Best marker */
+    .best-star { color: var(--gold); margin-left: 4px; font-size: 0.9rem; }
+
+    /* ── Chart Section ──────────────────────── */
+    .chart-section {
+      padding: 0 40px;
+      margin-bottom: 40px;
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .chart-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 20px;
+    }
+    .chart-bar-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .chart-model-name {
+      width: 140px; font-size: 0.8rem; color: var(--text-primary);
+      flex-shrink: 0; white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; font-weight: 500;
+    }
+    .chart-bar-wrap {
+      flex: 1; height: 22px; background: rgba(48,54,61,0.7);
+      border-radius: 4px; overflow: hidden;
+    }
+    .chart-bar {
+      height: 100%; border-radius: 4px;
+      display: flex; align-items: center; justify-content: flex-end;
+      padding-right: 8px;
+      font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.9);
+      transition: width 1s ease;
+    }
+    .chart-val { font-size: 0.78rem; font-weight: 700; min-width: 46px; text-align: right; }
+
+    /* ── Footer ─────────────────────────────── */
+    .footer {
+      padding: 24px 40px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer strong { color: var(--text-primary); }
+
+    /* Tooltip */
+    [title] { cursor: help; }
+
+    @media (max-width: 768px) {
+      .header, .summary-section, .table-wrapper, .chart-section, .footer { padding-left: 20px; padding-right: 20px; }
+      .header-title { font-size: 1.4rem; }
+      .chart-grid { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-title">🔬 Gastroenteroloji Model Kıyaslaması</div>
+  <div class="header-subtitle">Kapsül Endoskopi Sınıflandırma — CNN & VLM Karşılaştırmalı Analizi</div>
+  <div class="header-badge">
+    <span class="badge-dot"></span>
+    8 Sınıf · Kvasir Dataset · Test Seti Metrikleri
+  </div>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="summary-section">
+  <div class="summary-grid">
+    <div class="summary-card blue">
+      <div class="card-label">Toplam Model</div>
+      <div class="card-value" style="color:#58a6ff">8</div>
+      <div class="card-sub">6 CNN + 2 VLM</div>
+    </div>
+    <div class="summary-card green">
+      <div class="card-label">En İyi Macro F1</div>
+      <div class="card-value" style="color:#3fb950">94.4%</div>
+      <div class="card-sub">ResNeSt50d (CNN)</div>
+    </div>
+    <div class="summary-card gold">
+      <div class="card-label">En İyi Val Acc</div>
+      <div class="card-value" style="color:#f0c040">94.5%</div>
+      <div class="card-sub">ResNeSt50d &amp; EfficientNetV2-M</div>
+    </div>
+    <div class="summary-card purple">
+      <div class="card-label">VLM En İyi F1</div>
+      <div class="card-value" style="color:#bc8cff">18.0%</div>
+      <div class="card-sub">Qwen2.5-VL-3B (1-shot)</div>
+    </div>
+    <div class="summary-card orange">
+      <div class="card-label">CNN / VLM Farkı</div>
+      <div class="card-value" style="color:#ffa657">+76pp</div>
+      <div class="card-sub">Fine-tuning avantajı</div>
+    </div>
+  </div>
+</div>
+
+<!-- CNN TABLE -->
+<div class="table-wrapper">
+  <div class="section-title cnn" style="margin-bottom:16px">
+    <span></span>CNN Modelleri — En İyi Run Sonuçları
+  </div>
+  <table id="cnn-table">
+    <thead>
+      <tr>
+        <th style="width:40px">#</th>
+        <th>Model</th>
+        <th>Test Macro F1 ↑</th>
+        <th>Val Acc ↑</th>
+        <th>Best Val F1</th>
+        <th>F1 Görselleştirme</th>
+        <th>Augmentation</th>
+        <th>Batch</th>
+        <th>LR</th>
+        <th>Sınıf Ağırlığı</th>
+      </tr>
+    </thead>
+    <tbody id="cnn-tbody"></tbody>
+  </table>
+</div>
+
+<!-- VLM TABLE -->
+<div class="table-wrapper">
+  <div class="section-title vlm" style="margin-bottom:16px">
+    <span></span>VLM Modelleri — 1-Shot Değerlendirme
+  </div>
+  <table id="vlm-table">
+    <thead>
+      <tr>
+        <th style="width:40px">#</th>
+        <th>Model</th>
+        <th>Test Macro F1 ↑</th>
+        <th>Test Accuracy ↑</th>
+        <th>Weighted F1</th>
+        <th>F1 Görselleştirme</th>
+        <th>Yaklaşım</th>
+        <th>Shots</th>
+      </tr>
+    </thead>
+    <tbody id="vlm-tbody"></tbody>
+  </table>
+</div>
+
+<!-- CHARTS -->
+<div class="chart-section">
+  <div class="section-title cnn" style="margin-bottom:20px">
+    <span></span>Görsel Karşılaştırma
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">Test Macro F1 — Tüm Modeller</div>
+      <div id="all-f1-chart"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">CNN Val Accuracy Karşılaştırması</div>
+      <div id="cnn-acc-chart"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>
+    <strong>Gastroenterology CNN Comparison</strong> · Kvasir-v2 Dataset · 8-Class Classification
+  </div>
+  <div>
+    Fine-tuned CNN'ler 1-shot VLM'lerden <strong>~76 puan</strong> daha yüksek F1 elde etti.
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const CNN_DATA = [
+  {
+    name: 'ResNeSt50d',
+    sub: 'Split-Attention ResNet',
+    type: 'CNN',
+    test_f1: 0.9344,
+    val_acc: 0.9450,
+    best_val_f1: 0.9344,
+    aug: 'Baseline',
+    batch: 32,
+    lr: '3e-4',
+    class_weight: false,
+    run_tag: 'dropout02_ls03_wd0p0001_bs32_ep30_lr0p0003',
+    color: '#58a6ff',
+    icon: '🔵',
+    bg: 'rgba(88,166,255,0.15)'
+  },
+  {
+    name: 'CvT-13',
+    sub: 'Convolutional Vision Transformer',
+    type: 'CNN',
+    test_f1: 0.9402,
+    val_acc: 0.9400,
+    best_val_f1: 0.9398,
+    aug: 'Aug + TargetCW',
+    batch: 32,
+    lr: '8e-5',
+    class_weight: true,
+    run_tag: 'dropout01_dp05_ls02_wd0p0005_b32_e50_lr8e-05_i224_augON_cwlON',
+    color: '#bc8cff',
+    icon: '🟣',
+    bg: 'rgba(188,140,255,0.15)'
+  },
+  {
+    name: 'EfficientNetV2-M',
+    sub: 'EfficientNet V2 Medium',
+    type: 'CNN',
+    test_f1: 0.9436,
+    val_acc: 0.9450,
+    best_val_f1: 0.9436,
+    aug: 'No Aug',
+    batch: 32,
+    lr: '1.5e-4',
+    class_weight: false,
+    run_tag: 'dropout03_ls10_wd0p001_bs32_ep50_lr0p00015_augOFF',
+    color: '#3fb950',
+    icon: '🟢',
+    bg: 'rgba(63,185,80,0.15)'
+  },
+  {
+    name: 'ConvNeXt-Base',
+    sub: 'ConvNeXt Base (87M)',
+    type: 'CNN',
+    test_f1: 0.9308,
+    val_acc: 0.9367,
+    best_val_f1: 0.9308,
+    aug: 'TargetCW Loss',
+    batch: 16,
+    lr: '2e-4',
+    class_weight: true,
+    run_tag: 'dropout03_ls08_wd0p0007_bs16_ep50_lr0p0002_i256_cwlON',
+    color: '#ffa657',
+    icon: '🟠',
+    bg: 'rgba(255,166,87,0.15)'
+  },
+  {
+    name: 'ResNeXt50-32x4d',
+    sub: 'Aggregated Residual Transforms',
+    type: 'CNN',
+    test_f1: 0.9246,
+    val_acc: 0.9392,
+    best_val_f1: 0.9246,
+    aug: 'Baseline',
+    batch: 32,
+    lr: '3e-4',
+    class_weight: true,
+    run_tag: 'dropout03_ls05_wd0p0001_bs32_ep30_lr0p0003',
+    color: '#e3b341',
+    icon: '🟡',
+    bg: 'rgba(227,179,65,0.15)'
+  },
+  {
+    name: 'MobileNetV3-Large',
+    sub: 'MobileNetV3 Large (5.4M)',
+    type: 'CNN',
+    test_f1: 0.9188,
+    val_acc: 0.9325,
+    best_val_f1: 0.9188,
+    aug: 'Baseline',
+    batch: 32,
+    lr: '2e-4',
+    class_weight: false,
+    run_tag: 'dropout05_ls10_wd0p0005_bs32_ep50_lr0p0002_smpOFF',
+    color: '#f85149',
+    icon: '🔴',
+    bg: 'rgba(248,81,73,0.15)'
+  }
+];
+
+const VLM_DATA = [
+  {
+    name: 'Qwen2.5-VL-3B',
+    sub: 'Qwen/Qwen2.5-VL-3B-Instruct',
+    type: 'VLM',
+    test_f1: 0.1802,
+    test_acc: 0.2541,
+    weighted_f1: 0.1802,
+    approach: 'Choice Prompt',
+    shots: 1,
+    color: '#bc8cff',
+    icon: '🤖',
+    bg: 'rgba(188,140,255,0.12)'
+  },
+  {
+    name: 'Qwen2-VL-2B',
+    sub: 'Qwen/Qwen2-VL-2B-Instruct',
+    type: 'VLM',
+    test_f1: 0.0278,
+    test_acc: 0.1250,
+    weighted_f1: 0.0278,
+    approach: 'Direct Prompt',
+    shots: 1,
+    color: '#8b949e',
+    icon: '🤖',
+    bg: 'rgba(139,148,158,0.12)'
+  }
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+function f1Color(v) {
+  if (v >= 0.93) return '#f0c040';
+  if (v >= 0.90) return '#3fb950';
+  if (v >= 0.50) return '#e3b341';
+  return '#f85149';
+}
+
+function f1Class(v) {
+  if (v >= 0.93) return 'f1-best';
+  if (v >= 0.90) return 'f1-good';
+  if (v >= 0.50) return 'f1-medium';
+  return 'f1-low';
+}
+
+function rankBadge(i) {
+  const cls = ['rank-1','rank-2','rank-3'];
+  const lbl = ['🥇','🥈','🥉'];
+  if (i < 3) return `<div class="rank-badge ${cls[i]}">${lbl[i]}</div>`;
+  return `<div class="rank-badge rank-n">${i+1}</div>`;
+}
+
+function barCell(val, max=1.0, color='#3fb950') {
+  const pct = Math.min(100, (val / max) * 100);
+  return `
+    <div class="bar-container">
+      <div class="bar-bg">
+        <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+      <div class="bar-label" style="color:${color}">${(val*100).toFixed(2)}%</div>
+    </div>`;
+}
+
+function augPill(aug) {
+  if (!aug || aug === 'None' || aug === 'Baseline') {
+    return `<span class="aug-pill none">${aug || 'Baseline'}</span>`;
+  }
+  return `<span class="aug-pill">${aug}</span>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER CNN TABLE
+// ─────────────────────────────────────────────────────────────────────────────
+const sorted = [...CNN_DATA].sort((a, b) => b.test_f1 - a.test_f1);
+const maxF1 = sorted[0].test_f1;
+
+const cnnTbody = document.getElementById('cnn-tbody');
+sorted.forEach((m, i) => {
+  const isBest = i === 0;
+  const star   = isBest ? '<span class="best-star">★</span>' : '';
+  const row = `
+    <tr>
+      <td>${rankBadge(i)}</td>
+      <td>
+        <div class="model-cell">
+          <div class="model-icon" style="background:${m.bg};color:${m.color}">
+            ${m.icon}
+          </div>
+          <div>
+            <div class="model-name">${m.name}${star}</div>
+            <div class="model-sub">${m.sub}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <span class="metric-f1 ${f1Class(m.test_f1)}" style="color:${f1Color(m.test_f1)}">
+          ${(m.test_f1 * 100).toFixed(2)}%
+        </span>
+      </td>
+      <td><span class="metric-acc">${(m.val_acc * 100).toFixed(2)}%</span></td>
+      <td><span class="metric-acc">${(m.best_val_f1 * 100).toFixed(2)}%</span></td>
+      <td>${barCell(m.test_f1, maxF1, m.color)}</td>
+      <td>${augPill(m.aug)}</td>
+      <td><span class="metric-muted">${m.batch}</span></td>
+      <td><span class="metric-muted">${m.lr}</span></td>
+      <td>
+        <span style="color:${m.class_weight ? '#3fb950':'#8b949e'};font-size:0.8rem;font-weight:500">
+          ${m.class_weight ? '✓ Ağırlıklı' : '— Yok'}
+        </span>
+      </td>
+    </tr>`;
+  cnnTbody.insertAdjacentHTML('beforeend', row);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER VLM TABLE
+// ─────────────────────────────────────────────────────────────────────────────
+const vlmSorted = [...VLM_DATA].sort((a, b) => b.test_f1 - a.test_f1);
+const vlmTbody  = document.getElementById('vlm-tbody');
+vlmSorted.forEach((m, i) => {
+  const row = `
+    <tr>
+      <td>${rankBadge(i)}</td>
+      <td>
+        <div class="model-cell">
+          <div class="model-icon" style="background:${m.bg};color:${m.color}">
+            ${m.icon}
+          </div>
+          <div>
+            <div class="model-name">${m.name}</div>
+            <div class="model-sub">${m.sub}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="metric-f1 ${f1Class(m.test_f1)}" style="color:${f1Color(m.test_f1)}">${(m.test_f1*100).toFixed(2)}%</span></td>
+      <td><span class="metric-acc">${(m.test_acc*100).toFixed(2)}%</span></td>
+      <td><span class="metric-muted">${(m.weighted_f1*100).toFixed(2)}%</span></td>
+      <td>${barCell(m.test_f1, 1.0, m.color)}</td>
+      <td><span class="aug-pill vlm">${m.approach}</span></td>
+      <td><span class="metric-muted">${m.shots}-shot</span></td>
+    </tr>`;
+  vlmTbody.insertAdjacentHTML('beforeend', row);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ALL-F1 CHART (CNN + VLM)
+// ─────────────────────────────────────────────────────────────────────────────
+const allData = [
+  ...sorted.map(m => ({ name: m.name, f1: m.test_f1, color: m.color, type: 'CNN' })),
+  ...vlmSorted.map(m => ({ name: m.name, f1: m.test_f1, color: m.color, type: 'VLM' }))
+];
+
+const allF1Chart = document.getElementById('all-f1-chart');
+allData.forEach(m => {
+  const pct = (m.f1 * 100).toFixed(2);
+  const barPct = Math.min(100, (m.f1 / allData[0].f1) * 100);
+  const typeBadge = m.type === 'VLM'
+    ? '<span class="type-badge type-vlm">VLM</span>'
+    : '<span class="type-badge type-cnn">CNN</span>';
+  allF1Chart.insertAdjacentHTML('beforeend', `
+    <div class="chart-bar-row">
+      <div class="chart-model-name" title="${m.name}">${typeBadge} ${m.name}</div>
+      <div class="chart-bar-wrap">
+        <div class="chart-bar" style="width:${barPct}%;background:linear-gradient(90deg,${m.color}99,${m.color})">
+          ${pct}%
+        </div>
+      </div>
+    </div>`);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CNN VAL ACC CHART
+// ─────────────────────────────────────────────────────────────────────────────
+const accSorted = [...CNN_DATA].sort((a, b) => b.val_acc - a.val_acc);
+const accChart  = document.getElementById('cnn-acc-chart');
+accSorted.forEach(m => {
+  const pct    = (m.val_acc * 100).toFixed(2);
+  const barPct = Math.min(100, (m.val_acc / accSorted[0].val_acc) * 100);
+  accChart.insertAdjacentHTML('beforeend', `
+    <div class="chart-bar-row">
+      <div class="chart-model-name" title="${m.name}">${m.name}</div>
+      <div class="chart-bar-wrap">
+        <div class="chart-bar" style="width:${barPct}%;background:linear-gradient(90deg,${m.color}88,${m.color})">
+          ${pct}%
+        </div>
+      </div>
+    </div>`);
+});
+</script>
+</body>
+</html>
