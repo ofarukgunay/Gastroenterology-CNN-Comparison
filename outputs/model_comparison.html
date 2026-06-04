@@ -317,8 +317,8 @@
   <div class="summary-grid">
     <div class="summary-card blue">
       <div class="card-label">Toplam Model</div>
-      <div class="card-value" style="color:#58a6ff">8</div>
-      <div class="card-sub">6 CNN + 2 VLM</div>
+      <div class="card-value" style="color:#58a6ff">10</div>
+      <div class="card-sub">6 CNN + 4 VLM</div>
     </div>
     <div class="summary-card green">
       <div class="card-label">En İyi Macro F1</div>
@@ -370,7 +370,7 @@
 <!-- VLM TABLE -->
 <div class="table-wrapper">
   <div class="section-title vlm" style="margin-bottom:16px">
-    <span></span>VLM Modelleri — 1-Shot Değerlendirme
+    <span></span>VLM Modelleri — Few-Shot Değerlendirme
   </div>
   <table id="vlm-table">
     <thead>
@@ -411,7 +411,7 @@
     <strong>Gastroenterology CNN Comparison</strong> · Kvasir-v2 Dataset · 8-Class Classification
   </div>
   <div>
-    Fine-tuned CNN'ler 1-shot VLM'lerden <strong>~76 puan</strong> daha yüksek F1 elde etti.
+    Fine-tuned CNN'ler few-shot VLM'lerden <strong>~76 puan</strong> daha yüksek F1 elde etti.
   </div>
 </div>
 
@@ -544,6 +544,36 @@ const VLM_DATA = [
     color: '#8b949e',
     icon: '🤖',
     bg: 'rgba(139,148,158,0.12)'
+  },
+  {
+    name: 'SmolVLM-2B',
+    sub: 'HuggingFaceTB/SmolVLM-Instruct',
+    type: 'VLM',
+    test_f1: 0.0278,
+    test_acc: 0.1250,
+    weighted_f1: 0.0278,
+    approach: 'Few-Shot Eval',
+    shots: 3,
+    samples: 40,
+    avg_time: 1.9800,
+    color: '#d2a8ff',
+    icon: '🤖',
+    bg: 'rgba(210,168,255,0.12)'
+  },
+  {
+    name: 'SmolVLM-500M',
+    sub: 'HuggingFaceTB/SmolVLM-500M-Instruct',
+    type: 'VLM',
+    test_f1: 0.0278,
+    test_acc: 0.1250,
+    weighted_f1: 0.0278,
+    approach: 'Few-Shot Eval',
+    shots: 1,
+    samples: 24,
+    avg_time: 1.8395,
+    color: '#58a6ff',
+    icon: '🤖',
+    bg: 'rgba(88,166,255,0.12)'
   }
 ];
 
@@ -639,6 +669,9 @@ sorted.forEach((m, i) => {
 const vlmSorted = [...VLM_DATA].sort((a, b) => b.test_f1 - a.test_f1);
 const vlmTbody  = document.getElementById('vlm-tbody');
 vlmSorted.forEach((m, i) => {
+  const outputMeta = [m.samples ? `n=${m.samples}` : null, m.avg_time ? `${m.avg_time.toFixed(4)}s/img` : null]
+    .filter(Boolean)
+    .join(' · ');
   const row = `
     <tr>
       <td>${rankBadge(i)}</td>
@@ -657,7 +690,10 @@ vlmSorted.forEach((m, i) => {
       <td><span class="metric-acc">${(m.test_acc*100).toFixed(2)}%</span></td>
       <td><span class="metric-muted">${(m.weighted_f1*100).toFixed(2)}%</span></td>
       <td>${barCell(m.test_f1, 1.0, m.color)}</td>
-      <td><span class="aug-pill vlm">${m.approach}</span></td>
+      <td>
+        <span class="aug-pill vlm">${m.approach}</span>
+        ${outputMeta ? `<div class="metric-muted" style="margin-top:4px">${outputMeta}</div>` : ''}
+      </td>
       <td><span class="metric-muted">${m.shots}-shot</span></td>
     </tr>`;
   vlmTbody.insertAdjacentHTML('beforeend', row);
