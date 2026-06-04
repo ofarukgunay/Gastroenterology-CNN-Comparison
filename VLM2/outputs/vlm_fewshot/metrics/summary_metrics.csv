@@ -1,0 +1,3 @@
+file,model,shots,num_samples,accuracy,macro_f1,weighted_f1,avg_inference_time_sec
+C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\VLM2\outputs\vlm_fewshot\predictions\smolvlm_2b_shot3.csv,smolvlm_2b,3,40,0.125,0.027777777777777776,0.02777777777777778,1.9799925000000003
+C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\VLM2\outputs\vlm_fewshot\predictions\smolvlm_500m_shot1.csv,smolvlm_500m,1,24,0.125,0.027777777777777776,0.027777777777777776,1.8394750000000002

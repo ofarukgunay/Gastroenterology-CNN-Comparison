@@ -1,0 +1,579 @@
+model,shots,image_path,true_label,raw_output,pred_label,is_correct,inference_time_sec
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\dyed-lifted-polyps\2f68defc-2513-4d49-a52c-38cec6437daa.jpg,dyed-lifted-polyps,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Dyed-lifted-polyps.",dyed-lifted-polyps,1,1.4486
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\dyed-lifted-polyps\07b354f4-412e-4fb3-95aa-75b7409ce334.jpg,dyed-lifted-polyps,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 6. polyps.",dyed-lifted-polyps,1,1.0361
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\dyed-lifted-polyps\6cfecf81-c42c-44ed-8c34-5ad128e58734.jpg,dyed-lifted-polyps,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Dyed-lifted-polyps.",dyed-lifted-polyps,1,1.1184
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\dyed-resection-margins\58bdaec5-0e9c-4734-884b-03f2b965921b.jpg,dyed-resection-margins,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Dyed-lifted-polyps.",dyed-lifted-polyps,0,1.1104
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\dyed-resection-margins\5390f72f-bdb7-40f5-950b-cd6c24dc0b75.jpg,dyed-resection-margins,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d",dyed-lifted-polyps,0,1.7351
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\dyed-resection-margins\3e52907d-f78e-4394-9de1-27bac149836d.jpg,dyed-resection-margins,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Dyed-lifted-polyps.",dyed-lifted-polyps,0,1.1951
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\esophagitis\32f6e8e1-4722-4d11-8980-91b3f3dc029b.jpg,esophagitis,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 1. ulcerative-colitis",dyed-lifted-polyps,0,1.0919
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\esophagitis\eaa99417-e3d6-47ee-b728-2a76a3239d52.jpg,esophagitis,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 6.",dyed-lifted-polyps,0,1.006
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\esophagitis\23c13ff7-738c-43a3-936d-8b2d1214f5ba.jpg,esophagitis,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Dyed-lifted-polyps.",dyed-lifted-polyps,0,1.1277
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-cecum\a3f50f9f-e2c1-41fc-b52f-8c79e52f56d1.jpg,normal-cecum,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 1. ulcerative-colitis",dyed-lifted-polyps,0,1.0984
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-cecum\05a6cd5c-f32b-42b2-b386-bf971bd1785c.jpg,normal-cecum,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d",dyed-lifted-polyps,0,1.6968
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-cecum\04d8ae41-0d9c-4994-b6ff-2466bccae84c.jpg,normal-cecum,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 1. ulcerative-colitis.",dyed-lifted-polyps,0,1.1477
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-pylorus\3b57141b-acbf-4431-833a-8ee9a18c8cd8.jpg,normal-pylorus,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 1. ulcerative-colitis",dyed-lifted-polyps,0,1.0849
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-pylorus\6c9be005-9c6e-4ae7-bf9f-8d0e4742ca0a.jpg,normal-pylorus,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 63d8485f-7d3c-4286-9d9f-77b24f6",dyed-lifted-polyps,0,1.7212
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-pylorus\76cf6249-7425-4454-bc1d-4d2cb8f6647a.jpg,normal-pylorus,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: dyed-lifted-polyps.",dyed-lifted-polyps,0,1.1637
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-z-line\e40ea398-63a3-421f-bb62-e8d64ac78842.jpg,normal-z-line,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 1. ulcerative-colitis",dyed-lifted-polyps,0,1.1158
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-z-line\0be91a4e-be3d-4c06-92d7-6e0ee417f55a.jpg,normal-z-line,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 1. ulcerative-colitis",dyed-lifted-polyps,0,1.4611
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\normal-z-line\ef31b03f-93b8-4be4-b7dd-856d6e1bb36b.jpg,normal-z-line,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 1. ulcerative-colitis",dyed-lifted-polyps,0,2.2545
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\polyps\44011fa3-7954-4c63-a8c9-57134776a717.jpg,polyps,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 69c84c5f-7d3c-4286-9d9f-77b24f6",dyed-lifted-polyps,0,4.3301
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\polyps\e4e4a647-2dce-48f6-9a7a-8d7b1b219ad5.jpg,polyps,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 69c84c5f-7d3c-4286-9d9f-77b24f6",dyed-lifted-polyps,0,4.7373
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\polyps\a29eafda-dc84-495a-84f8-9980a506b9b9.jpg,polyps,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 63d80c5f-7d3c-4286-9d9f-77b24f6",dyed-lifted-polyps,0,4.6734
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\ulcerative-colitis\584f1fa0-9bb9-49d3-b412-c42819d0a200_00003006.jpg,ulcerative-colitis,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Dyed-lifted-polyps.",dyed-lifted-polyps,0,2.6848
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\ulcerative-colitis\c658dd7c-4f52-4ee3-8b22-2519102e8439.jpg,ulcerative-colitis,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: 6.",dyed-lifted-polyps,0,1.595
+smolvlm_500m,1,C:\Users\mehme\OneDrive\Masaüstü\Gastroenterology-CNN-Comparison\data\prepared-data\test\ulcerative-colitis\ff493607-67fb-40e2-b234-b26bdb9118d3.jpg,ulcerative-colitis,"User:
+
+
+
+
+You are a visual classification assistant.
+
+Your task is to classify the given image into exactly one of the following classes:
+dyed-lifted-polyps, dyed-resection-margins, esophagitis, normal-cecum, normal-pylorus, normal-z-line, polyps, ulcerative-colitis
+
+Few-shot shot count: 1
+Return only the class name.
+Do not explain.
+
+Few-shot textual references (image_file -> class):
+1. 28b93758-b5e6-4d25-b410-63b7adc262de.jpg -> ulcerative-colitis
+2. 099c90f2-63d8-4648-a56b-777edf1db178.jpg -> esophagitis
+3. 69c84c5f-7d3c-4286-9d9f-77b24f6af6d4.jpg -> normal-z-line
+4. 22cdd677-ae1d-4827-bc1f-6b06fa67d8e2.jpg -> polyps
+5. e5959a34-6b52-4053-b047-1d769a138bb9.jpg -> dyed-lifted-polyps
+6. 578954ec-5b69-454e-a1b1-2c2064a0f85a.jpg -> normal-cecum
+7. 7be87d92-3c07-4ca2-b6c5-b854c31a0df2.jpg -> normal-pylorus
+8. 2b230fa7-b421-47b3-9ced-84185398b49d.jpg -> dyed-resection-margins
+Assistant: Dyed-lifted-polyons.",dyed-lifted-polyps,0,2.5134

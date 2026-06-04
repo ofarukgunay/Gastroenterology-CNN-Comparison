@@ -1,0 +1,3 @@
+Error during inference for internvl2_5_2b
+Failed to load model: OpenGVLab/InternVL2_5-2B
+Last error: Using `bitsandbytes` 4-bit quantization requires bitsandbytes: `pip install -U bitsandbytes>=0.46.1`

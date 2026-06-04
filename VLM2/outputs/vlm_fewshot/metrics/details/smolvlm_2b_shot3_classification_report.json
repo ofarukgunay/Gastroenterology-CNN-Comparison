@@ -1,0 +1,63 @@
+{
+  "dyed-lifted-polyps": {
+    "precision": 0.125,
+    "recall": 1.0,
+    "f1-score": 0.2222222222222222,
+    "support": 5
+  },
+  "dyed-resection-margins": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5
+  },
+  "esophagitis": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5
+  },
+  "normal-cecum": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5
+  },
+  "normal-pylorus": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5
+  },
+  "normal-z-line": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5
+  },
+  "polyps": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5
+  },
+  "ulcerative-colitis": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5
+  },
+  "macro avg": {
+    "precision": 0.015625,
+    "recall": 0.125,
+    "f1-score": 0.027777777777777776,
+    "support": 40
+  },
+  "weighted avg": {
+    "precision": 0.015625,
+    "recall": 0.125,
+    "f1-score": 0.02777777777777778,
+    "support": 40
+  },
+  "accuracy": 0.125
+}

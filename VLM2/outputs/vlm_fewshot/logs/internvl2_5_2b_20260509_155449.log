@@ -1,0 +1,3 @@
+Error during inference for internvl2_5_2b
+Failed to load model: OpenGVLab/InternVL2_5-2B
+Last error: Tensor.item() cannot be called on meta tensors
